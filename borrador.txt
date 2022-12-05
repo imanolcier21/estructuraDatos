@@ -1,0 +1,36 @@
+   do{
+                if(dato.diaNacimiento > 0 && dato.diaNacimiento < 32 && dato.mesNacimiento > 0 && dato.mesNacimiento < 13 && dato.anioNacimiento > 1900 && dato.anioNacimiento < 2022){
+                    int edad = 2022 - dato.anioNacimiento;
+                    if(edad >= 18 && edad <= 35){
+                        bandera = 0;
+                    }else{
+                        printf(" La edad debe estar entre 18 y 35 anios. \n ");
+                        printf(" Ingrese el dia de nacimiento: ");
+                        scanf("%d%*c", &dato.diaNacimiento);
+                        printf(" Ingrese el mes de nacimiento: ");
+                        scanf("%d%*c", &dato.mesNacimiento);
+                        printf(" Ingrese el anio de nacimiento: ");
+                        scanf("%d%*c", &dato.anioNacimiento);
+                    }
+                }
+                }while(bandera != 0);
+
+
+
+
+printf(" Ingrese el nombre: ");
+                scanf("%[^\n]%*c", dato.nombre);
+                printf(" Ingrese el apellido paterno: ");
+                scanf("%[^\n]%*c", dato.apellidoPaterno);
+                printf(" Ingrese el apellido materno: ");
+                scanf("%[^\n]%*c", dato.apellidoMaterno);
+                printf(" Ingrese el dia de nacimiento: ");
+                scanf("%d%*c", &dato.diaNacimiento);
+                printf(" Ingrese el mes de nacimiento: ");
+                scanf("%d%*c", &dato.mesNacimiento);
+                printf(" Ingrese el anio de nacimiento: ");
+                scanf("%d%*c", &dato.anioNacimiento);
+                printf(" Ingrese el correo: ");
+                scanf("%[^\n]%*c", dato.correo);
+                printf(" Ingrese el telefono: ");
+                scanf("%d%*c", &dato.telefono);

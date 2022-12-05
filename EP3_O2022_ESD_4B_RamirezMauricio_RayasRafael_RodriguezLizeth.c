@@ -14,7 +14,7 @@ struct Persona{
 };
 
 struct nodo{
-    struct Persona dato;
+    struct Persona dato; 
     struct nodo *izq;
     struct nodo *der;
 };
@@ -22,13 +22,11 @@ struct nodo{
 
 int insertar(struct Persona dato, struct nodo **raiz);
 int eliminar(struct nodo **raiz, struct Persona dato);
-//funciones para imprimir el arbol completo
 void imprimir(struct nodo *raiz);
-//funcion para imprimir nodos con una fecha de nacimiento especifica
 int imprimirFecha(struct nodo *raiz, int dia, int mes, int anio);
-//funcion para imprimir nodos con el mismo mes de nacimiento
 int imprimirMes(struct nodo *raiz, int mes);
-void imprimirnum(struct nodo *raiz, int num);
+int imprimirTelefono(struct nodo *raiz, char num[]);
+int buscar(struct nodo **raiz, struct Persona dato);
 int menu();
 
 int main(){
@@ -106,7 +104,19 @@ int main(){
         case 6:
             printf(" Ingrese el numero de telefono: ");
             scanf("%[^\n]*c", dato.telefono);
-            imprimirnum(raiz, dato.telefono);
+            imprimirTelefono(raiz, dato.telefono);
+            break;
+        case 7:
+            printf(" Ingrese el nombre: ");
+            scanf("%[^\n]%*c", dato.nombre);
+            printf(" Ingrese el apellido paterno: ");
+            scanf("%[^\n]%*c", dato.apellidoPaterno);
+            printf(" Ingrese el apellido materno: ");
+            scanf("%[^\n]%*c", dato.apellidoMaterno);
+            buscar(&raiz, dato);
+            break;
+        default:
+            printf(" Opcion no valida. \n ");
             break;
         }
     }while(opcion != 8);
@@ -116,8 +126,8 @@ int menu(){
     int opc;
     printf("\n1. Agregar persona\n");
     printf("2. Eliminar persona\n");
-    printf("3.Visualizar todas las persona\n");
-    printf("4.Visualizar personas por fecha de nacimiento\n");
+    printf("3. Visualizar todas las persona\n");
+    printf("4. Visualizar personas por fecha de nacimiento\n");
     printf("5. VIsualizar personas con mes de nacimiento\n");
     printf("6. Consultar por numero de telefono\n");
     printf("7. Modificar datos de una persona\n");
@@ -218,7 +228,6 @@ void imprimir(struct nodo *raiz){
     }
 }
 
-//función para visualizar todos los nodos del arbols que tengan una fecha de nacimiento especifica (dia, mes y año)
 int imprimirFecha(struct nodo *raiz, int dia, int mes, int anio){
     int contador = 0;
     if(raiz != NULL){
@@ -237,7 +246,6 @@ int imprimirFecha(struct nodo *raiz, int dia, int mes, int anio){
     }
 }
 
-//función para visualizar todos los nodos del arbol que tengan un mes de nacimiento especifico
 int imprimirMes(struct nodo *raiz, int mes){
     int contador = 0;
     if(raiz != NULL){
@@ -256,17 +264,74 @@ int imprimirMes(struct nodo *raiz, int mes){
     }
 }
 
-void imprimirnum(struct nodo *raiz, int num){
+int imprimirTelefono(struct nodo *raiz, char telefono[]){
+    int contador = 0;
     if(raiz != NULL){
-        imprimirnum(raiz->izq, num);
-        if(raiz->dato.telefono == num){
+        imprimirTelefono(raiz->izq, telefono);
+        if(strcmp(raiz->dato.telefono, telefono) == 0){
             printf("*************************************************\n");
             printf(" Nombre: %s %s %s\n", raiz->dato.nombre, raiz->dato.apellidoPaterno, raiz->dato.apellidoMaterno);
             printf(" Fecha de nacimiento: %d/%d/%d\n", raiz->dato.diaNacimiento, raiz->dato.mesNacimiento, raiz->dato.anioNacimiento);
             printf(" Correo: %s\n", raiz->dato.correo);
             printf(" Telefono: %s\n", raiz->dato.telefono);
             printf("*************************************************\n");
+            contador++;
         }
-        imprimirnum(raiz->der, num);
+        imprimirTelefono(raiz->der, telefono);
+        return contador;
+    }
+}
+
+
+int buscar(struct nodo **raiz, struct Persona dato){
+    int opcion;
+    if(*raiz == NULL){
+        return 0;
+    }else{
+        if(strcmp((*raiz)->dato.nombre, dato.nombre) == 0 && strcmp((*raiz)->dato.apellidoPaterno, dato.apellidoPaterno) == 0 && strcmp((*raiz)->dato.apellidoMaterno, dato.apellidoMaterno) == 0){
+            printf("*************************************************\n");
+            printf(" Nombre: %s %s %s\n", (*raiz)->dato.nombre, (*raiz)->dato.apellidoPaterno, (*raiz)->dato.apellidoMaterno);
+            printf(" Fecha de nacimiento: %d/%d/%d\n", (*raiz)->dato.diaNacimiento, (*raiz)->dato.mesNacimiento, (*raiz)->dato.anioNacimiento);
+            printf(" Correo: %s\n", (*raiz)->dato.correo);
+            printf(" Telefono: %s\n", (*raiz)->dato.telefono);
+            printf("*************************************************\n");
+            do{
+            printf("¿Desea modificar algun dato? (1 = si, 0 = no): ");
+            scanf("%d%*c", &opcion);
+            if(opcion == 1){
+                printf("¿Que dato desea modificar? (1 = nombre, 2 = fecha de nacimiento, 3 = correo, 4 = telefono): ");
+                int opcion2;
+                scanf("%d%*c", &opcion2);
+                switch(opcion2){
+                    case 1:
+                        printf("Ingrese el nuevo nombre: ");
+                        scanf("%[^\n]%*c", (*raiz)->dato.nombre);
+                        printf("Ingrese el nuevo apellido paterno: ");
+                        scanf("%[^\n]%*c", (*raiz)->dato.apellidoPaterno);
+                        printf("Ingrese el nuevo apellido materno: ");
+                        scanf("%[^\n]%*c", (*raiz)->dato.apellidoMaterno);
+                        break;
+                    case 2:
+                        printf("Ingrese el nuevo dia de nacimiento: ");
+                        scanf("%d%*c", &(*raiz)->dato.diaNacimiento);
+                        printf("Ingrese el nuevo mes de nacimiento: ");
+                        scanf("%d%*c", &(*raiz)->dato.mesNacimiento);
+                        printf("Ingrese el nuevo anio de nacimiento: ");
+                        scanf("%d%*c", &(*raiz)->dato.anioNacimiento);
+                        break;
+                    case 3:
+                        printf("Ingrese el nuevo correo: ");
+                        scanf("%[^\n]%*c", (*raiz)->dato.correo);
+                        break;
+                    case 4:
+                        printf("Ingrese el nuevo telefono: ");
+                        scanf("%[^\n]%*c", (*raiz)->dato.telefono);
+                        break;
+                    default:
+                        printf("Opcion no valida :(\n");
+                        break; 
+                }
+            } 
+        }while(opcion != 0);}
     }
 }
