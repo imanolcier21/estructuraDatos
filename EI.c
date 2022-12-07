@@ -70,8 +70,8 @@ void imprimirDoctor(struct Doctor doctor);
 void imprimirPaciente(struct Paciente paciente);
 int capturarDoctor(struct Doctor *doctor);
 int capturarPaciente(struct Paciente *paciente);
-int buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor);
-int buscarPacientePorCurp(struct nodo *raiz);
+struct Doctor buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor);
+struct Paciente buscarPacientePorCurp(struct nodo *raiz, struct Paciente paciente);
 int buscarPacientePorNombre(struct nodo *raiz, struct Paciente paciente);
 int buscarDoctorPorNombre(struct nodo *raiz, struct Doctor doctor);
 
@@ -135,33 +135,154 @@ int main(){
                 break;
             case 4:
             //preguntar si se quiere consultar un doctor o un paciente y preguntar el campo a buscar y mostrar los resultados de la busqueda
-            printf("Buscar doctor por clave \n");
-            printf("Buscar paciente por curp \n");
+            printf("1. Buscar doctor por clave \n");
+            printf("2. Buscar paciente por curp \n");
             scanf("%d%*c", &opc);
             switch(opc){
                 case 1:
                 printf("Ingrese la clave del doctor: ");
                 scanf("%[^\n]%*c", doctor.clave);
-                if(buscarDoctorPorClave(raiz, doctor)==1){
+                doctor = buscarDoctorPorClave(raiz, doctor);
                     imprimirDoctor(doctor);
-                }else{
-                    printf("No se encontro el doctor\n");
-                }
                 break;
-                /*case 2:
+                case 2:
                 printf("Ingrese la curp del paciente: ");
                 scanf("%[^\n]%*c", paciente.curp);
-                if(buscarPacientePorCurp(raiz)==1){
+                paciente = buscarPacientePorCurp(raiz, paciente);
                     imprimirPaciente(paciente);
-                }else{
-                    printf("No se encontro el paciente\n");
-                }
                 break;
                 default:
                 printf("Opcion no valida\n");
-                break;*/
+                break;
             }
                 break;
+            case 5:
+            //preguntar si se quiere modificar un doctor o un paciente y preguntar el campo a modificar y modificarlo
+            printf("1. Modificar doctor \n");
+            printf("2. Modificar paciente \n");
+            scanf("%d%*c", &opc);
+            //modificar doctor, preguntando el campo a modificar y modificandolo y preguntar si se quiere modificar otro campo
+            switch(opc){
+        case 1:
+            printf("Ingrese el nombre del doctor: ");
+            scanf("%[^\n]%*c", doctor.nombre);
+            doctor = buscarDoctor(raiz, doctor);
+            printf("1. Modificar clave\n");
+            printf("2. Modificar hora de inicio\n");
+            printf("3. Modificar hora de fin\n");
+            printf("4. Modificar numero de consultorio\n");
+            printf("5. Modificar especialidad\n");
+            printf("6. Modificar universidad\n");
+            printf("7. Modificar direccion\n");
+            printf("8. Modificar telefono\n");
+            printf("9. Modificar correo\n");
+            scanf("%d%*c", &opc);
+            switch(opc){
+            case 1:
+                printf("Ingrese la nueva clave: ");
+                scanf("%[^\n]%*c", doctor.clave);
+                break;
+            case 2:
+                printf("Ingrese la nueva hora de inicio: ");
+                scanf("%[^\n]%*c", doctor.horaInicio);
+                break;
+            case 3:
+                printf("Ingrese la nueva hora de fin: ");
+                scanf("%[^\n]%*c", doctor.horaFin);
+                break;
+            case 4:
+                printf("Ingrese el nuevo numero de consultorio: ");
+                scanf("%d%*c", &doctor.numeroConsultorio);
+                break;
+            case 5:
+                printf("Ingrese la nueva especialidad: ");
+                scanf("%[^\n]%*c", doctor.especialidad);
+                break;
+            case 6:
+                printf("Ingrese la nueva universidad: ");
+                scanf("%[^\n]%*c", doctor.universidad);
+                break;
+            case 7:
+                printf("Ingrese la nueva direccion: ");
+                scanf("%[^\n]%*c", doctor.direccion);
+                break;
+            case 8:
+                printf("Ingrese el nuevo telefono: ");
+                scanf("%[^\n]%*c", doctor.telefono);
+                break;
+            case 9:
+                printf("Ingrese el nuevo correo: ");
+                scanf("%[^\n]%*c", doctor.correo);
+                break;
+                default:
+                printf("Opcion no valida\n");
+                break;
+            }
+            break;
+        case 2:
+            printf("Ingrese la curp del paciente: ");
+            scanf("%[^\n]%*c", paciente.curp);
+            paciente = buscarPacientePorCurp(raiz, paciente);
+            printf("1. Modificar curp\n");
+            printf("2. Modificar dia de nacimiento\n");
+            printf("3. Modificar mes de nacimiento\n");
+            printf("4. Modificar anio de nacimiento\n");
+            printf("5. Modificar dia de cita\n");
+            printf("6. Modificar mes de cita\n");
+            printf("7. Modificar hora de cita\n");
+            printf("8. Modificar telefono\n");
+            printf("9. Modificar correo\n");
+            scanf("%d%*c", &opc);
+            switch(opc){
+            case 1:
+                printf("Ingrese la nueva curp: ");
+                scanf("%[^\n]%*c", paciente.curp);
+                break;
+            case 2:
+                printf("Ingrese el nuevo dia de nacimiento: ");
+                scanf("%d%*c", &paciente.diaNacimientoPaciente);
+                break;
+            case 3:
+                printf("Ingrese el nuevo mes de nacimiento: ");
+                scanf("%d%*c", &paciente.mesNacimientoPaciente);
+                break;
+            case 4:
+                printf("Ingrese el nuevo anio de nacimiento: ");
+                scanf("%d%*c", &paciente.anioNacimientoPaciente);
+                break;
+            case 5:
+                printf("Ingrese el nuevo dia de cita: ");
+                scanf("%d%*c", &paciente.diaCita);
+                break;
+            case 6:
+                printf("Ingrese el nuevo mes de cita: ");
+                scanf("%d%*c", &paciente.mesCita);
+                break;
+            case 7:
+                printf("Ingrese la nueva hora de cita: ");
+                scanf("%[^\n]%*c", paciente.horaCita);
+                break;
+            case 8:
+                printf("Ingrese el nuevo telefono: ");
+                scanf("%[^\n]%*c", paciente.telefonoP);
+                break;
+            case 9:
+                printf("Ingrese el nuevo correo: ");
+                scanf("%[^\n]%*c", paciente.correoP);
+                break;
+                default:
+                printf("Opcion no valida\n");
+                break;
+            }
+            break;
+        }
+        break;
+    case 6:
+        printf("Ingrese la clave del medico: ");
+        scanf("%[^\n]%*c", doctor.clave);
+        doctor = eliminar(raiz, doctor);
+        printf("Medico eliminado\n");
+        break;
         }   
     }while(opcion!=8); 
 }
@@ -181,6 +302,7 @@ int menu(){
     scanf("%d%*c", &opcion);
     return opcion;
 }
+
 
 int insertarCola(struct elemento **inicio, struct elemento **fin, struct nodo *nodo){
     struct elemento *nuevo;
@@ -366,28 +488,28 @@ struct Doctor eliminar(struct nodo **raiz, struct Doctor doctor){
 
 //funcion para imprimir un doctor en pantalla 
 void imprimirDoctor(struct Doctor doctor){
-    printf("Nombre: %s \t", doctor.nombre);
-    printf("Clave: %s \t", doctor.clave);
-    printf("Hora de inicio de consulta: %d \t", doctor.horaInicio);
-    printf("Hora de fin de consulta: %d \t", doctor.horaFin);
-    printf("Numero de consultorio: %d \t", doctor.numeroConsultorio);
-    printf("Especialidad: %s \t", doctor.especialidad);
-    printf("Universidad: %s \t", doctor.universidad);
-    printf("Direccion: %s \t", doctor.direccion);
-    printf("Telefono: %s \t", doctor.telefono);
-    printf(" Correo: %s \t", doctor.correo);
+    printf("Nombre: %s \n", doctor.nombre);
+    printf("Clave: %s \n", doctor.clave);
+    printf("Hora de inicio de consulta: %d \n", doctor.horaInicio);
+    printf("Hora de fin de consulta: %d \n", doctor.horaFin);
+    printf("Numero de consultorio: %d \n", doctor.numeroConsultorio);
+    printf("Especialidad: %s \n", doctor.especialidad);
+    printf("Universidad: %s \n", doctor.universidad);
+    printf("Direccion: %s \n", doctor.direccion);
+    printf("Telefono: %s \n", doctor.telefono);
+    printf(" Correo: %s \n", doctor.correo);
     printf(" \n");
 }
 
 //funcion para imprimir un paciente en pantalla
 void imprimirPaciente(struct Paciente paciente){
-    printf("Nombre: %s \t", paciente.nombrePaciente);
-    printf("Curp: %s \t", paciente.curp);
-    printf("Fecha de nacimiento: %d/%d/%d \t", paciente.diaNacimientoPaciente, paciente.mesNacimientoPaciente, paciente.anioNacimientoPaciente);
-    printf("Fecha de la cita: %d/%d \t", paciente.diaCita, paciente.mesCita);
-    printf("Hora de la cita: %d \t", paciente.horaCita);
-    printf("Telefono: %s \t", paciente.telefonoP);
-    printf("Correo: %s \t", paciente.correoP);
+    printf("Nombre: %s \n", paciente.nombrePaciente);
+    printf("Curp: %s \n", paciente.curp);
+    printf("Fecha de nacimiento: %d/%d/%d \n", paciente.diaNacimientoPaciente, paciente.mesNacimientoPaciente, paciente.anioNacimientoPaciente);
+    printf("Fecha de la cita: %d/%d \n", paciente.diaCita, paciente.mesCita);
+    printf("Hora de la cita: %d \n", paciente.horaCita);
+    printf("Telefono: %s \n", paciente.telefonoP);
+    printf("Correo: %s \n", paciente.correoP);
     printf(" \n");
 }
 
@@ -440,17 +562,29 @@ int capturarPaciente(struct Paciente *paciente){
     scanf("%[^\n]%*c", paciente->correoP);
 }
 
-int buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor){
+struct Doctor buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor){
     if(raiz != NULL){
         if(strcmp(raiz->doctor.clave, doctor.clave) == 0){
-            return 1;
+            return doctor;
         }else if(strcmp(raiz->doctor.clave, doctor.clave) > 0){
             return buscarDoctorPorClave(raiz->izquierda, doctor);
         }else{
             return buscarDoctorPorClave(raiz->derecha, doctor);
         }
     }
-    return 0;
+}
+
+//funcion que busque en el arbol de doctores un paciente por su curp
+struct Paciente buscarPacientePorCurp(struct nodo *raiz, struct Paciente paciente){
+    if(raiz != NULL){
+        if(strcmp(raiz->doctor.nombre, paciente.curp) == 0){
+            return paciente;
+        }else if(strcmp(raiz->doctor.nombre, paciente.curp) > 0){
+            return buscarPacientePorCurp(raiz->izquierda, paciente);
+        }else{
+            return buscarPacientePorCurp(raiz->derecha, paciente);
+        }
+    }
 }
 
 int buscarPacientePorNombre(struct nodo *raiz, struct Paciente paciente){
@@ -565,9 +699,6 @@ int agregarPaciente(struct nodo *raiz, struct Doctor doctor, struct Paciente pac
     }
     return 0;
 }
-
-
-
 
 //funcion para inicializar el arbol binario de doctores y pacientes con listas doblemente enlazadas 
 /*void inicializar(struct nodo **raiz){
