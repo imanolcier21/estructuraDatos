@@ -16,10 +16,10 @@ struct Paciente{
     char correoP[100];
 };
 
-struct ListaPaciente{
+struct listaPaciente{
     struct Paciente paciente;
-    struct ListaPaciente *siguiente;
-    struct ListaPaciente *anterior;
+    struct listaPaciente *siguiente;
+    struct listaPaciente *anterior;
 };
 
 struct Doctor{
@@ -81,14 +81,89 @@ int insertarFinal(struct listaPaciente **inicio, struct listaPaciente **fin, str
 int insertarDespues(struct listaPaciente *anterior,  struct Paciente paciente);
 int insertarOrdenado(struct listaPaciente **inicio, struct listaPaciente **fin, struct Paciente paciente);
 void imprimirLista(struct listaPaciente *inicio);
-int agregarPaciente(struct nodo *raiz, struct Doctor doctor, struct Paciente paciente);
+int agregarPaciente(struct nodo *raiz,struct Doctor doctor, struct Paciente paciente);
 
 
 void inicializar(struct nodo **raiz);
 
 
 int main(){
-    
+    struct nodo *raiz=NULL;
+    struct Doctor doctor;
+    struct Paciente paciente;
+    struct listaPaciente listaPaciente;
+    int opcion;
+    int opc;
+    //fucion de inicializar
+    do{
+        opcion = menu();
+        switch(opcion){
+            case 1:
+                if(capturarDoctor(&doctor)==1){
+                    if(insertar(&raiz,doctor)){
+                        printf("Doctor agregado correctamente\n");
+                    }else{
+                        printf("No se pudo agregar el doctor\n");
+                    }
+                }else{
+                    printf("No se pudo capturar el doctor\n");
+                }
+                break;
+            case 2:
+            printf("Ingrese el nombre del doctor: ");
+            scanf("%[^\n]%*c", doctor.nombre);
+            if(buscarDoctorPorNombre(raiz, doctor)==1){
+                if(capturarPaciente(&paciente)==1){
+                    if(agregarPaciente(raiz, doctor, paciente)){
+                        printf("Paciente agregado correctamente\n");
+                    }else{
+                        printf("No se pudo agregar el paciente\n");
+                    }
+                }else{
+                    printf("No se pudo capturar el paciente\n");
+                }
+            }else{
+                printf("No se encontro el doctor\n");
+            }
+                break;
+            case 3:
+            //preguntar el nombre del doctor y mostrar los pacientes
+            printf("Ingrese el nombre del doctor: ");
+            scanf("%[^\n]%*c", doctor.nombre);
+            doctor = buscarDoctor(raiz, doctor);
+                imprimirLista(doctor.inicio);
+                break;
+            case 4:
+            //preguntar si se quiere consultar un doctor o un paciente y preguntar el campo a buscar y mostrar los resultados de la busqueda
+            printf("Buscar doctor por clave \n");
+            printf("Buscar paciente por curp \n");
+            scanf("%d%*c", &opc);
+            switch(opc){
+                case 1:
+                printf("Ingrese la clave del doctor: ");
+                scanf("%[^\n]%*c", doctor.clave);
+                if(buscarDoctorPorClave(raiz, doctor)==1){
+                    imprimirDoctor(doctor);
+                }else{
+                    printf("No se encontro el doctor\n");
+                }
+                break;
+                /*case 2:
+                printf("Ingrese la curp del paciente: ");
+                scanf("%[^\n]%*c", paciente.curp);
+                if(buscarPacientePorCurp(raiz)==1){
+                    imprimirPaciente(paciente);
+                }else{
+                    printf("No se encontro el paciente\n");
+                }
+                break;
+                default:
+                printf("Opcion no valida\n");
+                break;*/
+            }
+                break;
+        }   
+    }while(opcion!=8); 
 }
   
 
@@ -237,7 +312,11 @@ int buscar(struct nodo *raiz, struct Doctor doctor){
 
 struct Doctor buscarDoctor(struct nodo *raiz, struct Doctor doctor){
     if(raiz == NULL){
+        doctor.inicio = NULL;
         return doctor;
+    }
+     if(strcmp(doctor.nombre, raiz->doctor.nombre) == 0){
+        return raiz->doctor;
     }
     if(strcmp(doctor.nombre, raiz->doctor.nombre) < 0){
         return buscarDoctor(raiz->izquierda, doctor);
@@ -245,10 +324,6 @@ struct Doctor buscarDoctor(struct nodo *raiz, struct Doctor doctor){
     if(strcmp(doctor.nombre, raiz->doctor.nombre) > 0){
         return buscarDoctor(raiz->derecha, doctor);
     }
-    if(strcmp(doctor.nombre, raiz->doctor.nombre) == 0){
-        return raiz->doctor;
-    }
-    return doctor;
 }
 
 struct Doctor eliminar(struct nodo **raiz, struct Doctor doctor){
@@ -318,44 +393,51 @@ void imprimirPaciente(struct Paciente paciente){
 
 int capturarDoctor(struct Doctor *doctor){
     printf("Nombre: ");
-    scanf("%s", doctor->nombre);
+    scanf("%[^\n]%*c", doctor->nombre);
     printf("Clave: ");
-    scanf("%s", doctor->clave);
+    scanf("%[^\n]%*c", doctor->clave);
     printf("Hora de inicio de consulta: ");
-    scanf("%d", &doctor->horaInicio);
+    scanf("%d%*c", &doctor->horaInicio);
     printf("Hora de fin de consulta: ");
-    scanf("%d", &doctor->horaFin);
+    scanf("%d%*c", &doctor->horaFin);
     printf("Numero de consultorio: ");
-    scanf("%d", &doctor->numeroConsultorio);
+    scanf("%d%*c", &doctor->numeroConsultorio);
     printf("Especialidad: ");
-    scanf("%s", doctor->especialidad);
+    scanf("%[^\n]%*c", doctor->especialidad);
     printf("Universidad: ");
-    scanf("%s", doctor->universidad);
+    scanf("%[^\n]%*c", doctor->universidad);
     printf("Direccion: ");
-    scanf("%s", doctor->direccion);
+    scanf("%[^\n]%*c", doctor->direccion);
     printf("Telefono: ");
-    scanf("%s", doctor->telefono);
+    scanf("%[^\n]%*c", doctor->telefono);
     printf("Correo: ");
-    scanf("%s", doctor->correo);
+    scanf("%[^\n]%*c", doctor->correo);
     doctor -> inicio = NULL;
     doctor -> fin = NULL;
+    return 1;
 }
 
 int capturarPaciente(struct Paciente *paciente){
     printf("Nombre: ");
-    scanf("%s", paciente->nombrePaciente);
+    scanf("%[^\n]%*c", paciente->nombrePaciente);
     printf("Curp: ");
-    scanf("%s", paciente->curp);
-    printf("Fecha de nacimiento: ");
-    scanf("%d/%d/%d", &paciente->diaNacimientoPaciente, &paciente->mesNacimientoPaciente, &paciente->anioNacimientoPaciente);
-    printf("Fecha de la cita: ");
-    scanf("%d/%d", &paciente->diaCita, &paciente->mesCita);
+    scanf("%[^\n]%*c", paciente->curp);
+    printf("Dia de nacimiento: ");
+    scanf("%d%*c", &paciente->diaNacimientoPaciente);
+    printf("Mes de nacimiento: ");
+    scanf("%d%*c", &paciente->mesNacimientoPaciente);
+    printf("Anio de nacimiento: ");
+    scanf("%d%*c", &paciente->anioNacimientoPaciente);
+    printf("Dia de la cita: ");
+    scanf("%d%*c", &paciente->diaCita);
+    printf("Mes de la cita: ");
+    scanf("%d%*c", &paciente->mesCita);
     printf("Hora de la cita: ");
-    scanf("%d", &paciente->horaCita);
+    scanf("%d%*c", &paciente->horaCita);
     printf("Telefono: ");
-    scanf("%s", paciente->telefonoP);
+    scanf("%[^\n]%*c", paciente->telefonoP);
     printf("Correo: ");
-    scanf("%s", paciente->correoP);
+    scanf("%[^\n]%*c", paciente->correoP);
 }
 
 int buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor){
@@ -397,7 +479,7 @@ int buscarDoctorPorNombre(struct nodo *raiz, struct Doctor doctor){
     return 0;
 }
 
-/*int insertarInicio(struct listaPaciente **inicio, struct listaPaciente **fin, struct Paciente paciente){
+int insertarInicio(struct listaPaciente **inicio, struct listaPaciente **fin, struct Paciente paciente){
     struct listaPaciente *nuevo;
     nuevo = (struct listaPaciente*)malloc(sizeof(struct listaPaciente));
     nuevo->paciente = paciente;
@@ -410,7 +492,7 @@ int buscarDoctorPorNombre(struct nodo *raiz, struct Doctor doctor){
     }
     *fin = nuevo;
     return 1;
-}*/
+}
 
 int insertarFinal(struct listaPaciente **inicio, struct listaPaciente **fin, struct Paciente paciente){
     struct listaPaciente *nuevo;
@@ -428,6 +510,62 @@ int insertarFinal(struct listaPaciente **inicio, struct listaPaciente **fin, str
     return 1;
 }
 
+int insertarDespues(struct listaPaciente *anterior,  struct Paciente paciente){
+    struct listaPaciente *nuevo;
+    nuevo = (struct listaPaciente*)malloc(sizeof(struct listaPaciente));
+    nuevo->paciente = paciente;
+    nuevo->siguiente = anterior->siguiente;
+    (anterior->siguiente)->anterior = nuevo;
+    anterior->siguiente = nuevo;
+}
+
+int insertarOrdenado(struct listaPaciente **inicio, struct listaPaciente **fin, struct Paciente paciente){
+    struct listaPaciente *aux;
+    aux=*inicio;
+    while(aux!=NULL){
+        if(strcmp(aux->paciente.nombrePaciente, paciente.nombrePaciente)){
+            if(aux->anterior == NULL){
+                return insertarFinal(inicio, fin, paciente);
+            }
+            else{
+                return insertarDespues(aux->anterior, paciente);
+            }
+        }
+        aux=aux->siguiente;
+    }
+    return insertarFinal(inicio, fin, paciente);
+}
+
+  void imprimirLista(struct listaPaciente *inicio){
+    struct listaPaciente *aux;
+    aux = inicio;
+    while(aux != NULL){
+        printf("Nombre: %s\n", aux->paciente.nombrePaciente);
+        printf("Curp: %s\n", aux->paciente.curp);
+        printf("Fecha de nacimiento: %d/%d/%d\n", aux->paciente.diaNacimientoPaciente, aux->paciente.mesNacimientoPaciente, aux->paciente.anioNacimientoPaciente);
+        printf("Fecha cita: %d/%d\n", aux->paciente.diaCita, aux->paciente.mesCita);
+        printf("Hora cita %d\n", aux->paciente.horaCita);
+        printf("Telefono %s\n", aux->paciente.telefonoP);
+        printf("Correo %s\n", aux->paciente.correoP);
+        aux=aux->siguiente;
+  }
+  printf("\n");
+}
+
+int agregarPaciente(struct nodo *raiz, struct Doctor doctor, struct Paciente paciente){
+    if(raiz != NULL){
+        if(strcmp(raiz->doctor.nombre, doctor.nombre) == 0){
+            insertarOrdenado(&raiz->doctor.inicio, &raiz->doctor.fin, paciente);
+            return 1;
+        }else if(strcmp(raiz->doctor.nombre, doctor.nombre) > 0){
+            return agregarPaciente(raiz->izquierda, doctor, paciente);
+        }else{
+            return agregarPaciente(raiz->derecha, doctor, paciente);
+        }
+    }
+    return 0;
+}
+
 
 
 
@@ -437,6 +575,3 @@ int insertarFinal(struct listaPaciente **inicio, struct listaPaciente **fin, str
     struct Doctor doct2={"35843285", "Maria Lopez", 9, 15, 2, "Ginecologia", "IPN", "Av. Universidad 1000", "5541284723"};
     struct Doctor doct3={"75832347", "Mauricio Paulin", 8, 18, 1, "Gastroentorologia", "UAEM", "Av. Universidad 1000", "5598423457"};
 }*/
-
-
-
