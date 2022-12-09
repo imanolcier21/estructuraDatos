@@ -134,29 +134,13 @@ int main(){
                 imprimirLista(doctor.inicio);
                 break;
             case 4:
-            //preguntar si se quiere consultar un doctor o un paciente y preguntar el campo a buscar y mostrar los resultados de la busqueda
-            printf("1. Buscar doctor por clave \n");
-            printf("2. Buscar paciente por curp \n");
-            scanf("%d%*c", &opc);
-            switch(opc){
-                case 1:
-                printf("Ingrese la clave del doctor: ");
-                scanf("%[^\n]%*c", doctor.clave);
-                doctor = buscarDoctorPorClave(raiz, doctor);
-                    imprimirDoctor(doctor);
+            //preguntar la clave del doctor y mostrar los datos del doctor
+            printf("Ingrese la clave del doctor: ");
+            scanf("%[^\n]%*c", doctor.clave);
+            doctor = buscarDoctorPorClave(raiz, doctor);
+                imprimirDoctor(doctor);
                 break;
-                case 2:
-                printf("Ingrese la curp del paciente: ");
-                scanf("%[^\n]%*c", paciente.curp);
-                paciente = buscarPacientePorCurp(raiz, paciente);
-                    imprimirPaciente(paciente);
-                break;
-                default:
-                printf("Opcion no valida\n");
-                break;
-            }
-                break;
-            case 5:
+            /*case 5:
             //preguntar si se quiere modificar un doctor o un paciente y preguntar el campo a modificar y modificarlo
             printf("1. Modificar doctor \n");
             printf("2. Modificar paciente \n");
@@ -280,9 +264,9 @@ int main(){
     case 6:
         printf("Ingrese la clave del medico: ");
         scanf("%[^\n]%*c", doctor.clave);
-        doctor = eliminar(raiz, doctor);
+        doctor = eliminar(&raiz, doctor);
         printf("Medico eliminado\n");
-        break;
+        break;*/
         }   
     }while(opcion!=8); 
 }
@@ -293,7 +277,7 @@ int menu(){
     printf("1. Agregar doctor\n");
     printf("2. Agregar paciente a medico\n");
     printf("3. Consultar pacientes de un medico\n");
-    printf("4. Consultar doctor/medico por campo en especifico\n");
+    printf("4. Consultar doctor por clave\n");
     printf("5. Modificar datos de un doctor/paciente\n");
     printf("6. Eliminar un medico\n");
     printf("7. Eliminar un paciente\n");
@@ -563,10 +547,11 @@ int capturarPaciente(struct Paciente *paciente){
 }
 
 struct Doctor buscarDoctorPorClave(struct nodo *raiz, struct Doctor doctor){
+   //buscar a un doctor por su clave
     if(raiz != NULL){
         if(strcmp(raiz->doctor.clave, doctor.clave) == 0){
-            return doctor;
-        }else if(strcmp(raiz->doctor.clave, doctor.clave) > 0){
+            return raiz->doctor;
+        }else if(strcmp(doctor.clave, raiz->doctor.clave) < 0){
             return buscarDoctorPorClave(raiz->izquierda, doctor);
         }else{
             return buscarDoctorPorClave(raiz->derecha, doctor);
